@@ -1,8 +1,8 @@
 const express = require('express');
-const config = require('./config');
-const authMiddleware = require('./middleware/auth');
-const errorHandler = require('./middleware/error');
-const routes = require('./routes');
+const config = require('./src/config');
+const authMiddleware = require('./src/middleware/auth');
+const errorHandler = require('./src/middleware/error');
+const routes = require('./src/routes');
 const pkg = require('./package.json');
 
 const { port, secret } = config;
@@ -22,8 +22,11 @@ app.use(authMiddleware(secret));
 // Registrar rutas
 routes(app, (err) => {
   if (err) {
+    console.error('Error al registrar rutas:', err);
     throw err;
   }
+
+  module.exports = app;
 
   app.use(errorHandler);
 
