@@ -26,8 +26,6 @@ routes(app, (err) => {
     throw err;
   }
 
-  module.exports = app;
-
   app.use(errorHandler);
 
   app.listen(port, () => {
