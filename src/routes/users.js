@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const express = require('express');
-const { connect } = require('../connect');
+const { connect } = require('../../connect');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 
 const {

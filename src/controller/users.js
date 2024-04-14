@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
-const { connect } = require('../connect');
+const { connect } = require('../../connect');
 
 module.exports = {
   getUsers: async (req, resp, next) => {

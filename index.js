@@ -1,9 +1,9 @@
 const express = require('express');
-const config = require('../src/config');
-const authMiddleware = require('../src/middleware/auth');
-const errorHandler = require('../src/middleware/error');
-const routes = require('../src/routes');
-const pkg = require('../package.json');
+const config = require('./config');
+const authMiddleware = require('./src/middleware/auth');
+const errorHandler = require('./src/middleware/error');
+const routes = require('./src/routes');
+const pkg = require('./package.json');
 
 const { port, secret } = config;
 const app = express();
@@ -32,3 +32,5 @@ routes(app, (err) => {
     console.info(`App listening on port ${port}`);
   });
 });
+
+module.exports = app;
