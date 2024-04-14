@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { connect } = require('../../connect');
-const { secret } = require('../../config');
+const { connect } = require('../connect');
+const { secret } = require('../config');
 
 module.exports = (app, nextMain) => {
   app.post('/login', async (req, resp, next) => {
