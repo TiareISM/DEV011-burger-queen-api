@@ -22,6 +22,7 @@ app.use(authMiddleware(secret));
 // Registrar rutas
 routes(app, (err) => {
   if (err) {
+    console.error('Error al registrar rutas:', err);
     throw err;
   }
 
@@ -31,3 +32,5 @@ routes(app, (err) => {
     console.info(`App listening on port ${port}`);
   });
 });
+
+module.exports = app;
