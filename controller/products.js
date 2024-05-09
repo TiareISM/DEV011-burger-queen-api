@@ -1,13 +1,13 @@
 const { ObjectId } = require('mongodb');
 const { connect } = require('../connect');
 
+// Conexión a DB.
+const db = connect();
+const collection = db.collection('products');
+
 module.exports = {
   getProducts: async (req, resp, next) => {
     try {
-      // Conexión a DB.
-      const db = connect();
-      const collection = db.collection('products');
-
       // Parametros para paginación.
       const page = parseInt(req.query.page, 10) || 1;
       const limit = parseInt(req.query._limit, 10) || 10;
@@ -42,9 +42,6 @@ module.exports = {
 
   getProductsById: async (req, resp, next) => {
     try {
-      // Conexión a DB.
-      const db = connect();
-      const collection = db.collection('products');
       const { productId } = req.params;
       if (!/^[0-9a-fA-F]{24}$/.test(productId)) {
         return resp.status(404).json({ error: 'Id no válido' });
@@ -107,10 +104,6 @@ module.exports = {
 
   updateProduct: async (req, resp) => {
     try {
-      // Conexión a la DB.
-      const db = connect();
-      const collection = db.collection('products');
-
       // Obetener id del product.
       const { productId } = req.params;
       if (!/^[0-9a-fA-F]{24}$/.test(productId)) {
@@ -171,11 +164,6 @@ module.exports = {
           .status(404)
           .json({ error: 'El ID del producto solicitado no es válido' });
       }
-
-      // Conexión a DB
-      const db = connect();
-      const collection = db.collection('products');
-
       // Buscar el producto en la base de datos
       const objectId = new ObjectId(productId);
       const product = await collection.findOne({ _id: objectId });

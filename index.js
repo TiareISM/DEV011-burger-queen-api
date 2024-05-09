@@ -27,10 +27,10 @@ routes(app, (err) => {
   }
 
   app.use(errorHandler);
+});
 
-  app.listen(port, () => {
-    console.info(`App listening on port ${port}`);
-  });
+app.listen(port, () => {
+  console.info(`App listening on port ${port}`);
 });
 
 module.exports = app;

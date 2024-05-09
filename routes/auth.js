@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const config = require('../config');
 const { connect } = require('../connect');
-const { secret } = require('../config');
+
+const { secret } = config;
 
 module.exports = (app, nextMain) => {
   app.post('/login', async (req, resp, next) => {
@@ -30,9 +32,10 @@ module.exports = (app, nextMain) => {
           secret,
           { expiresIn: '1h' }
         );
-        return resp.json({ token: createToken });
+        resp.json({ token: createToken });
+      } else {
+        return resp.status(404).json({ error: 'La contraseña no coincide' });
       }
-      return resp.status(401).json({ error: 'La contraseña no coincide' });
     } catch (error) {
       console.error('Error al autenticar', error);
       return next(500);
