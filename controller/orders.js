@@ -1,21 +1,22 @@
 const { ObjectId } = require('mongodb');
 const { connect } = require('../connect');
 
+// Conexión a la base de datos
+const db = connect();
+const collection = db.collection('orders');
+
 module.exports = {
   postOrders: async (req, resp, next) => {
+    const { userId, client, products, status } = req.body;
+
+    if (!userId || !client || !products || !status) {
+      return resp.status(400).json({ error: 'Ingresar todos los campos' });
+    }
+    if (!client || !products) {
+      return resp.status(400).json({ error: 'Faltan datos' });
+    }
+
     try {
-      const { userId, client, products, status } = req.body;
-      if (!userId || !client || !products || !status) {
-        return resp.status(400).json({ error: 'Propiedades inválidas' });
-      }
-      if (!client || !products) {
-        return resp.status(400).json({ error: 'Faltan datos' });
-      }
-
-      // Conexión a la base de datos
-      const db = connect();
-      const collection = db.collection('orders');
-
       // Crear nueva orden.
       const createOrder = {
         userId,
@@ -32,16 +33,12 @@ module.exports = {
       resp.status(200).json(createOrder);
     } catch (error) {
       console.error('Error al crear orden', error);
-      resp.status(500).json({ error: ' Error al crear orden' });
+      resp.status(500).json({ error: ' Error interno del servidor' });
     }
   },
 
   getOrders: async (req, resp, next) => {
     try {
-      // Conexión a la DB.
-      const db = connect();
-      const collection = db.collection('orders');
-
       // Paginación.
       const page = parseInt(req.query.page, 10) || 1;
       const limit = parseInt(req.query._limit, 10) || 10;
@@ -82,10 +79,6 @@ module.exports = {
 
   getOrdersById: async (req, resp, next) => {
     try {
-      // Conexión a DB.
-      const db = connect();
-      const collection = db.collection('orders');
-
       // Buscar por id.
       const { orderId } = req.params;
       if (!ObjectId.isValid(orderId)) {
@@ -115,10 +108,6 @@ module.exports = {
 
   updateOrders: async (req, resp, next) => {
     try {
-      // Conexión a DB.
-      const db = connect();
-      const collection = db.collection('orders');
-
       // Buscar por id.
       const { orderId } = req.params;
       console.log('ID de la orden:', orderId);
@@ -176,10 +165,6 @@ module.exports = {
 
   deleteOrders: async (req, resp, next) => {
     try {
-      // Conexión a DB.
-      const db = connect();
-      const collection = db.collection('orders');
-
       // Buscar por id.
       const { orderId } = req.params;
       if (!ObjectId.isValid(orderId)) {

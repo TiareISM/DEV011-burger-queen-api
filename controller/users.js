@@ -2,14 +2,14 @@ const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
 const { connect } = require('../connect');
 
+// Conexión a DB.
+const db = connect();
+const collection = db.collection('user');
+
 module.exports = {
   getUsers: async (req, resp, next) => {
     // TODO: Implement the necessary function to fetch the `users` collection or table
     try {
-      // Conexión a DB.
-      const db = connect();
-      const collection = db.collection('user');
-
       // Obtener el número de página y el límite de usuarios por página de la consulta
       const page = parseInt(req.query.page, 10) || 1;
       const limit = parseInt(req.query._limit, 10) || 10;
@@ -50,10 +50,6 @@ module.exports = {
 
   getUserUid: async (req, resp, next) => {
     try {
-      // Conexión a DB.
-      const db = connect();
-      const collection = db.collection('user');
-
       // Obtener el Id del user.
       const userId = req.params.uid;
       let user;
@@ -84,10 +80,6 @@ module.exports = {
 
   postUser: async (req, resp) => {
     try {
-      // Conexión a DB.
-      const db = connect();
-      const collection = db.collection('user');
-
       // Validación de correo y contraseña.
       const { email, password, role } = req.body;
       if (!email || !password) {
@@ -124,10 +116,6 @@ module.exports = {
       // Insertar user y obtener el resultado
       await collection.insertOne(createUser);
 
-      /* // Obtener id asignado al new user
-      const createUserId = createUser.insertedId;
-      // Inlcuir id en la respuesta
-      const response = { _id: createUserId, ...createUser }; */
       delete createUser.password;
       return resp.status(200).json(createUser);
     } catch (error) {
@@ -138,9 +126,6 @@ module.exports = {
 
   updateUser: async (req, resp, next) => {
     try {
-      // Conexión a la DB.
-      const db = connect();
-      const collection = db.collection('user');
       const requestBody = req.body;
 
       // Obtener ID y verficar si el ID es válido
@@ -218,10 +203,6 @@ module.exports = {
 
   deleteUser: async (req, resp, next) => {
     try {
-      // Conexión a la DB.
-      const db = connect();
-      const collection = db.collection('user');
-
       // Obtener el valor del parámetro
       const userId = req.params.uid;
       let userToDelete;
@@ -250,11 +231,6 @@ module.exports = {
             .json({ error: 'No tienes permiso para este recurso' });
         }
       }
-      /* Verifica que no elimine su propia cuenta.
-      if (authenticatedUserId === userToDelete._id.toString()) {
-        return resp.status(403).json({ error: 'No puedes eliminarte' });
-      } */
-
       // Eliminar user de la DB.
       await collection.deleteOne({ _id: userToDelete._id });
       resp.json({ message: 'Usuario eliminado' });
