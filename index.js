@@ -9,7 +9,7 @@ const pkg = require('./package.json');
 const { port, secret } = config;
 const app = express();
 // Habilitar cors para las peticiones
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:5173' }));
 
 app.set('config', config);
 app.set('pkg', pkg);
